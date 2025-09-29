@@ -1,0 +1,498 @@
+<!-- Сайт розроблено студенткою Анастасією Юковою, група ФЕМП 3-з, факультет економіки, менеджменту і права -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квіти та Подарунки - Магазин</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5e6 100%);
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa06b 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        nav button:hover, nav button.active {
+            background: white;
+            color: #ff6b9d;
+        }
+
+        .section {
+            display: none;
+            padding: 40px 0;
+            min-height: 70vh;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero h2 {
+            font-size: 3em;
+            color: #ff6b9d;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .product-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            color: #ff6b9d;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .product-card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .product-price {
+            font-size: 1.5em;
+            color: #333;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa06b 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255,107,157,0.4);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cart-badge {
+            background: white;
+            color: #ff6b9d;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-total {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa06b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-cart-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .about-content, .contact-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            line-height: 1.8;
+        }
+
+        .about-content h3, .contact-content h3 {
+            color: #ff6b9d;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .contact-item-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        .remove-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .remove-btn:hover {
+            background: #ff3838;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>🌸 Квіти та Подарунки</h1>
+                    <p>Анастасія Юкова | ФЕМП 3-з | Факультет економіки, менеджменту і права</p>
+                </div>
+                <nav>
+                    <button class="nav-btn active" data-section="home">Головна</button>
+                    <button class="nav-btn" data-section="catalog">Каталог</button>
+                    <button class="nav-btn" data-section="cart">Кошик <span class="cart-badge" id="cartBadge">0</span></button>
+                    <button class="nav-btn" data-section="about">Про нас</button>
+                    <button class="nav-btn" data-section="contact">Контакти</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Головна сторінка -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h2>Вітаємо у нашому магазині! 🎁</h2>
+                <p>Оберіть найкращі квіти та подарунки для ваших близьких. У нас ви знайдете широкий асортимент свіжих квітів, ексклюзивних букетів та оригінальних подарунків на будь-який смак.</p>
+            </div>
+        </section>
+
+        <!-- Каталог -->
+        <section id="catalog" class="section">
+            <h2 style="text-align: center; color: #ff6b9d; font-size: 2.5em; margin-bottom: 20px;">Наш асортимент</h2>
+            <div class="products-grid" id="productsGrid"></div>
+        </section>
+
+        <!-- Кошик -->
+        <section id="cart" class="section">
+            <h2 style="text-align: center; color: #ff6b9d; font-size: 2.5em; margin-bottom: 20px;">Ваш кошик</h2>
+            <div id="cartContent"></div>
+        </section>
+
+        <!-- Про нас -->
+        <section id="about" class="section">
+            <div class="about-content">
+                <h3>Про наш магазин</h3>
+                <p>Ми - команда професіоналів, які закохані у квіти та мистецтво дарувати радість. Наш магазин працює вже понад 5 років, і за цей час ми допомогли тисячам клієнтів знайти ідеальний подарунок для своїх близьких.</p>
+                <p>Ми пропонуємо лише свіжі квіти від перевірених постачальників, а також ексклюзивні подарунки ручної роботи. Кожен букет створюється з любов'ю та увагою до деталей.</p>
+                <p><strong>Наші переваги:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 15px; line-height: 2;">
+                    <li>Свіжі квіти щодня</li>
+                    <li>Унікальні букети від професійних флористів</li>
+                    <li>Швидка доставка по місту</li>
+                    <li>Індивідуальний підхід до кожного клієнта</li>
+                    <li>Доступні ціни та акції</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Контакти -->
+        <section id="contact" class="section">
+            <div class="contact-content">
+                <h3>Зв'яжіться з нами</h3>
+                <p>Ми завжди раді відповісти на ваші запитання та допомогти з вибором подарунка!</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📞</div>
+                        <h4>Телефон</h4>
+                        <p>+380 (67) 123-45-67</p>
+                        <p>+380 (93) 987-65-43</p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📧</div>
+                        <h4>Email</h4>
+                        <p>info@flowers-gifts.ua</p>
+                        <p>support@flowers-gifts.ua</p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-item-icon">📍</div>
+                        <h4>Адреса</h4>
+                        <p>м. Одеса</p>
+                        <p>вул. Квіткова, 15</p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-item-icon">⏰</div>
+                        <h4>Режим роботи</h4>
+                        <p>Пн-Пт: 9:00 - 20:00</p>
+                        <p>Сб-Нд: 10:00 - 18:00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p><strong>Сайт розроблено студенткою Анастасією Юковою</strong></p>
+            <p>Група: ФЕМП 3-з | Факультет економіки, менеджменту і права</p>
+            <p>&copy; 2024 Квіти та Подарунки. Всі права захищено.</p>
+        </div>
+    </footer>
+
+    <script>
+        // База даних товарів
+        const products = [
+            { id: 1, name: 'Букет троянд', price: 850, icon: '🌹', description: 'Ніжний букет з червоних троянд' },
+            { id: 2, name: 'Весняні тюльпани', price: 650, icon: '🌷', description: 'Яскраві тюльпани різних кольорів' },
+            { id: 3, name: 'Соняшники', price: 550, icon: '🌻', description: 'Сонячні квіти для гарного настрою' },
+            { id: 4, name: 'Орхідея в горщику', price: 1200, icon: '🌸', description: 'Елегантна орхідея у керамічному горщику' },
+            { id: 5, name: 'Подарунковий набір', price: 980, icon: '🎁', description: 'Набір з чаєм, шоколадом та листівкою' },
+            { id: 6, name: 'Ароматична свічка', price: 420, icon: '🕯️', description: 'Свічка ручної роботи з натуральних компонентів' },
+            { id: 7, name: 'Плюшевий ведмедик', price: 750, icon: '🧸', description: 'М\'який ведмедик з бантиком' },
+            { id: 8, name: 'Коробка цукерок', price: 380, icon: '🍫', description: 'Асорті бельгійського шоколаду' },
+            { id: 9, name: 'Весільний букет', price: 1500, icon: '💐', description: 'Розкішний букет для нареченої' },
+            { id: 10, name: 'Кошик з квітами', price: 1100, icon: '🧺', description: 'Великий кошик зі свіжими квітами' }
+        ];
+
+        let cart = [];
+
+        // Навігація
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('.section');
+
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetSection = btn.dataset.section;
+                
+                navButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                sections.forEach(s => s.classList.remove('active'));
+                document.getElementById(targetSection).classList.add('active');
+            });
+        });
+
+        // Відображення товарів
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => {
+                const inCart = cart.some(item => item.id === product.id);
+                return `
+                    <div class="product-card">
+                        <div class="product-icon">${product.icon}</div>
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-price">${product.price} грн</div>
+                        <button class="btn" onclick="addToCart(${product.id})" ${inCart ? 'disabled' : ''}>
+                            ${inCart ? 'У кошику ✓' : 'Обрати'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Додавання в кошик
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product && !cart.some(item => item.id === productId)) {
+                cart.push(product);
+                updateCart();
+                renderProducts();
+            }
+        }
+
+        // Видалення з кошика
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+            renderProducts();
+        }
+
+        // Оновлення кошика
+        function updateCart() {
+            const cartBadge = document.getElementById('cartBadge');
+            const cartContent = document.getElementById('cartContent');
+            
+            cartBadge.textContent = cart.length;
+
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <h3>Ваш кошик порожній</h3>
+                        <p>Додайте товари з каталогу</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            cartContent.innerHTML = `
+                <div class="cart-items">
+                    ${cart.map(item => `
+                        <div class="cart-item">
+                            <div>
+                                <span style="font-size: 2em; margin-right: 15px;">${item.icon}</span>
+                                <strong>${item.name}</strong>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 20px;">
+                                <span style="font-size: 1.2em; font-weight: bold;">${item.price} грн</span>
+                                <button class="remove-btn" onclick="removeFromCart(${item.id})">Видалити</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="cart-total">
+                    <strong>Загальна сума: ${total} грн</strong>
+                </div>
+            `;
+        }
+
+        // Ініціалізація
+        renderProducts();
+        updateCart();
+    </script>
+</body>
+</html>
